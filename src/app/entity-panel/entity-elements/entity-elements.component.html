@@ -1,0 +1,22 @@
+<div class="wrapper"
+     fxLayout='column'
+     fxLayoutAlign='start start'
+     fxLayoutGap='1vh'
+>  
+  <ng-container *ngIf='entityIds.length > 0'>    
+    <app-entity-element
+      *ngFor="let id of entityIds"
+      [id]="id"
+      fxFlexFill
+    ></app-entity-element>
+  </ng-container>
+  
+  <div class="buttonWrapper"
+    fxLayout='row'
+    fxLayoutGap='1vw'
+  >    
+    <app-add-element-button></app-add-element-button>
+    <app-transpose-to-parent-button></app-transpose-to-parent-button>
+  </div>
+
+</div>

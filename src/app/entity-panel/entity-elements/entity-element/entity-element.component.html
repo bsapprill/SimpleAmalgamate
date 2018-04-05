@@ -1,0 +1,28 @@
+<div class="elementWrapper"
+     fxLayout='row'
+     fxLayoutAlign='start center'
+     fxLayoutGap='0.5vw'
+>
+
+    <button mat-icon-button class='transposeButton'
+            #transposeButton
+            (click)='userTransposesElement()'
+    >
+      <mat-icon class='transposeIcon'>first_page</mat-icon>
+    </button>
+
+    <input #elementNameInput
+      type="text"      
+      (focus)="onFocus()"
+      fxFlexAlign='stretch start'
+    >
+  
+    <button mat-icon-button class='removeElementButton'
+            #removeElementButton
+            (click)='userRemovesElement()'
+    >
+      <mat-icon class="removeIcon">remove_circle</mat-icon>
+    </button>
+
+</div>
+

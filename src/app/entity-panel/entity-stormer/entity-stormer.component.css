@@ -1,0 +1,11 @@
+.stormInput{
+    width: 100%;
+    
+    border: 2px solid black;
+    border-radius: 3px;
+    
+    text-indent: 25px;
+
+    font-size: medium;
+    font-weight: 600;
+}

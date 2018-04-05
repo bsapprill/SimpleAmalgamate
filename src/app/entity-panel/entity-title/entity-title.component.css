@@ -1,0 +1,18 @@
+.titleInput{
+    width: 100%;
+    min-height: 100%;
+
+    border: 4px solid black;
+    border-radius: 3px;
+
+    background-color: white;
+    
+    color: black;
+    text-align: left;    
+    text-indent: 2vh;    
+
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: x-large;    
+
+}

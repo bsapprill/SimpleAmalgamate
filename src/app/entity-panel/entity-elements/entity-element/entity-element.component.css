@@ -1,0 +1,44 @@
+input{
+    width: 100%;
+    height: 4vh;
+
+    border: 3px solid maroon;
+    border-radius: 1px;
+
+    color: black;
+
+    text-indent: 1vw;
+
+    font-family: sans-serif;
+    font-size: medium;
+    font-weight: bold;
+
+}
+
+.transposeButton{
+    background-color: orange;
+    height: 3vh;
+    width: 3vh;
+
+    border-radius: 3px;
+}
+
+.removeElementButton{
+    height: 3vh;
+    width: 3vh;    
+}
+
+.transposeIcon{
+
+    display: flex;
+
+    color: white;
+}
+
+.removeIcon{
+
+    display: inline-flex;
+    vertical-align: top;
+    color: red;
+    
+}
