@@ -3,8 +3,9 @@ import { EntityDataService } from '../entity-data/entity-data.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { EntityData } from '../entity-data/entity-data.model';
+
 import { EntityUpdateService } from '../entity-update.service';
+import { EntityData } from '../entity-data/entity-data.model';
 
 @Component({
   selector: 'app-entity-title',
@@ -28,16 +29,7 @@ export class EntityTitleComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.EDS.subscribeTitleToDatabase();
 
-    this.EDS.entityDoc.ref.get().then(doc => {
-      
-      this.EDS.activeEntityElement = doc.data();
-      
-      this.EUS.setElementValue(this.titleInput,
-                               this.EDS.activeEntityElement.title);
-
-    });
-
-    this.EDS.ActiveEntityTransposed.subscribe((data: EntityData) => {
+    this.EDS.ActiveEntityTransposed.subscribe((data: any) => {
       this.EUS.setElementValue(this.titleInput, data.title);
     });
   }

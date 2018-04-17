@@ -8,14 +8,10 @@ import { EntityDataService } from '../../entity-data/entity-data.service';
 })
 export class TransposeToParentButtonComponent implements OnInit {
 
-  @Output() entityHasParent: boolean = false;
-
   constructor(private EDS: EntityDataService) { }
 
   ngOnInit() {
-    this.EDS.ActiveEntityHasParent.subscribe(entityHasParent => {
-      this.entityHasParent = entityHasParent;
-    })
+    
   }
 
   @HostListener('click') userTransposesToParent(){

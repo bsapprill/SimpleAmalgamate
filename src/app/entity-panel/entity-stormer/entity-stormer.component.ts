@@ -24,16 +24,7 @@ export class EntityStormerComponent implements OnInit {
     
     this.EDS.subscribeStormToDatabase();
 
-    this.EDS.entityDoc.ref.get().then(doc => {
-      
-      this.EDS.activeEntityElement = doc.data();
-      
-      this.EUS.setElementValue(this.stormInput,
-                               this.EDS.activeEntityElement.stormText);
-
-    });
-
-    this.EDS.ActiveEntityTransposed.subscribe((data: EntityData) => {
+    this.EDS.ActiveEntityTransposed.subscribe((data: any) => {
       this.EUS.setElementValue(this.stormInput, data.stormText);
     });
   }

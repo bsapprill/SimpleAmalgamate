@@ -21,21 +21,9 @@ export class EntityElementsComponent implements OnInit {
   ngOnInit() {    
     this.EDS.subscribeEntityIdsToDatabase();
 
-    this.EDS.ActiveEntityElements.subscribe((newIds: number[]) => {
-      this.entityIds = newIds.slice();      
-    });
-
-    this.EDS.ActiveEntityTransposed.subscribe((data: EntityData) => {
+    this.EDS.ActiveEntityTransposed.subscribe( ( data: any ) => {
+      
       this.entityIds = data.childIds.slice();
-    });
-
-    this.EDS.entityDoc.ref.get().then(doc => {
-      
-      this.EDS.activeEntityElement = doc.data();
-      
-      doc.data().childIds.forEach( id => {
-        this.entityIds.push(id);
-      });
     });
 
   }

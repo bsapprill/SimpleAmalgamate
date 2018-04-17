@@ -17,7 +17,7 @@ export class EntityDataService{
     activeEntityElement: any;
     //This is actually an 'EntityData' type, but must use 'any' due to bug
 
-    activeEntityId: number = 0;
+    activeEntityId: number;
     
     focusedChildId: number;
 
@@ -29,7 +29,7 @@ export class EntityDataService{
     ActiveEntityElements = new Subject<number[]>();
     ActiveEntityStorm = new Subject<string>();
 
-    ActiveEntityTransposed = new Subject<DocumentData>();
+    ActiveEntityTransposed = new Subject<EntityData>();
 
     ActiveEntityHasParent = new Subject<boolean>();
 
@@ -42,13 +42,22 @@ export class EntityDataService{
                 private EUS: EntityUpdateService){
         
         this.entityCollection = db.collection<EntityData>('Entities');
-        this.entityDoc = this.entityCollection.doc(this.activeEntityId.toString());        
         this.dataDoc = db.collection<EDSData>('Data').doc('EDS');
-
-        this.dataDoc.ref.get().then(doc => {
-           this.newDocumentIds = doc.data().newDocumentIds;
-           this.nextDocumentId = doc.data().newIdCountHolder;
-        });
+        
+        this.dataDoc.valueChanges().subscribe( data => {
+            
+            this.entityDoc = this.entityCollection.doc(data.activeEntityId.toString());        
+            
+            this.activeEntityId = data.activeEntityId;
+            this.newDocumentIds = data.newDocumentIds;
+            this.nextDocumentId = data.newIdCountHolder;
+            
+            this.entityDoc.valueChanges().subscribe( ( data: EntityData ) => {
+                this.ActiveEntityTransposed.next(data);
+                this.activeEntityElement = data;
+            });
+            
+        });        
 
         this.activeChildChanges.subscribe((newTitle: string) => {
             this.entityCollection.doc(this.focusedChildId.toString())
@@ -99,9 +108,9 @@ export class EntityDataService{
             this.activeEntityId = id;
             this.entityDoc = this.entityCollection.doc(id.toString());
 
+            this.dataDoc.update({ activeEntityId: this.activeEntityId });
+
             this.ActiveEntityTransposed.next(doc.data());
-            
-            this.ActiveEntityHasParent.next(true);
         });
 
     }
@@ -109,19 +118,53 @@ export class EntityDataService{
     userTransposesToParent(){
 
         this.entityDoc.ref.get().then(doc => {
-            this.getDocAtId(doc.data().parentId).then(parentDoc => {
-
-                this.activeEntityId = parentDoc.data().id;
-                this.activeEntityElement = parentDoc.data();
-                this.entityDoc = this.entityCollection.doc(this.activeEntityId.toString());
-                this.ActiveEntityTransposed.next(parentDoc.data());
-
-                if(this.activeEntityElement.parentId === -1){
-                    this.ActiveEntityHasParent.next(false);
-                }
-
-            });
             
+            if(doc.data().parentId === -1){
+                
+                var nextId: number;
+
+                if(this.newDocumentIds.length !== 0){
+                    nextId = this.newDocumentIds.shift();                    
+                    this.dataDoc.update({ newDocumentIds: this.newDocumentIds });
+                }else{
+                    nextId = this.nextDocumentId;                    
+                    this.nextDocumentId++;
+                    this.dataDoc.update( { newIdCountHolder: this.nextDocumentId } );
+                }
+                                
+                this.entityCollection.doc(nextId.toString())
+                .set({
+                    childIds: [this.activeEntityId],
+                    id: nextId,
+                    parentId: -1,
+                    stormText: "",
+                    title: ""
+                });
+                
+                this.entityDoc.update( { parentId: nextId} );
+
+                this.entityDoc = this.entityCollection.doc(nextId.toString());
+
+                this.activeEntityElement = doc.data();
+
+                this.ActiveEntityTransposed.next(doc.data());
+
+            }
+            else{
+
+                this.getDocAtId(doc.data().parentId).then(parentDoc => {
+    
+                    this.activeEntityId = parentDoc.data().id;
+                    this.activeEntityElement = parentDoc.data();
+                    this.entityDoc = this.entityCollection.doc(this.activeEntityId.toString());
+
+                    this.dataDoc.update({ activeEntityId: this.activeEntityId });
+
+                    this.ActiveEntityTransposed.next(parentDoc.data());
+    
+    
+                });
+            }
 
         });
     }

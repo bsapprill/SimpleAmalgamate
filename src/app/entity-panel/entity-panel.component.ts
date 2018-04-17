@@ -5,8 +5,7 @@ import { EntityData } from './entity-data/entity-data.model';
 @Component({
   selector: 'app-entity-panel',
   templateUrl: './entity-panel.component.html',
-  styleUrls: ['./entity-panel.component.css'],
-  providers: [EntityDataService]
+  styleUrls: ['./entity-panel.component.css']
 })
 export class EntityPanelComponent implements OnInit {
 
